@@ -1,0 +1,67 @@
+---
+- name: Set mount file variable.
+  ansible.builtin.set_fact:
+    _mount_file: >|
+      [Unit]
+      Description=Mount build partition
+
+      [Mount]
+      What=/dev/disk/by-uuid/{{ uuid }}
+      Where={{ path }}
+      Type=xfs
+      Options=rw,noatime
+
+      [Install]
+      WantedBy=multi-user.target
+
+- name: Set variables for filesystems UUIDs.
+  ansible.builtin.set_facts:
+    _config_uuid: "{{ lookup('env', 'FRIGATE_CONFIG_UUID') }}"
+    _db_uuid: "{{ lookup('env', 'FRIGATE_DB_UUID') }}"
+    _storage_uuid: "{{ lookup('env', 'FRIGATE_STORAGE_UUID') }}"
+
+- name: Create systemd mount file for /config.
+  ansible.builtin.copy:
+    content: "{{ _mount_file }}"
+    dest: /etc/systemd/system/config.mount
+    owner: root
+    group: root
+    mode: 0600
+  notify:
+    - daemon-reload
+    - frigate-config-mount-enabled
+    - frigate-config-mount-started
+  vars:
+    uuid: "{{ _config_uuid }}"
+    path: "/config"
+
+- name: Create systemd mount file for /db.
+  ansible.builtin.copy:
+    content: "{{ _mount_file }}"
+    dest: /etc/systemd/system/db.mount
+    owner: root
+    group: root
+    mode: 0600
+  notify:
+    - daemon-reload
+    - frigate-db-mount-enabled
+    - frigate-db-mount-started
+  vars:
+    uuid: "{{ _db_uuid }}"
+    path: "/db"
+
+- name: Create systemd mount file for /media/frigate.
+  ansible.builtin.copy:
+    content: "{{ _mount_file }}"
+    dest: /etc/systemd/system/media-storage.mount
+    owner: root
+    group: root
+    mode: 0600
+  notify:
+    - daemon-reload
+    - frigate-storage-mount-enabled
+    - frigate-storage-mount-started
+  vars:
+    uuid: "{{ _storage_uuid}}"
+    path: "/media/frigate"
+ 

@@ -7,6 +7,41 @@
   vars_files:
    - vars.yaml
 
+  handlers:
+  - name: daemon-reload
+    ansible.builtin.systemd:
+      daemon_reload: true
+
+  - name: frigate-config-mount-enabled
+    ansible.builtin.systemd:
+      name: config.mount
+      enabled: true
+
+  - name: frigate-db-mount-enabled
+    ansible.builtin.systemd:
+      name: db.mount
+      enabled: true
+
+  - name: frigate-storage-mount-enabled
+    ansible.builtin.systemd:
+      name: media-frigate.mount
+      enabled: true
+
+  - name: frigate-config-mount-started
+    ansible.builtin.systemd:
+      name: config.mount
+      state: started
+
+  - name: frigate-db-mount-started
+    ansible.builtin.systemd:
+      name: db.mount
+      state: started
+
+  - name: frigate-storage-mount-started
+    ansible.builtin.systemd:
+      name: media-frigate.mount
+      state: started
+
   tasks:
     - name: Fail if.
       ansible.builtin.include_tasks: fail.yaml
@@ -23,3 +58,5 @@
      - name: Set Environment variables.
        ansible.builtin.include_tasks: envs.yaml
 
+     - name: Create systemd mounts.
+       ansible.builtin.include_tasks: systemd-mounts.yaml

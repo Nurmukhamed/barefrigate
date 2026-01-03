@@ -10,6 +10,14 @@ bash pull_extract_docker_image.sh
 
 ~~~
 
+## Discover frigate filesystem uuids and set them as environment variables.
+
+~~~bash
+export FRIGATE_CONFIG_UUID="FRIGATE_CONFIG_UUID"
+export FRIGATE_DB_UUID="FRIGATE_DB_UUID"
+export FRIGATE_STORAGE_UUID="FRIGATE_STORAGE_UUID"
+
+~~~
 ## Ansible playbook.
 
 Run command:
