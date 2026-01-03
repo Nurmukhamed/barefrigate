@@ -1,0 +1,25 @@
+---
+- name: Do bare frigate.
+  hosts: all
+  gather_facts: true
+  become: true
+
+  vars_files:
+   - vars.yaml
+
+  tasks:
+    - name: Fail if.
+      ansible.builtin.include_tasks: fail.yaml
+
+    - name: Do apt install.
+      ansible.builtin.include_tasks: apt.yaml
+
+    - name: Copy files to remote server.
+      ansible.builtin.include_tasks: copy-files.yaml
+
+#    - name: Create and install systemd services.
+#      ansible.builtin.include_tasks: systemd.yaml
+
+     - name: Set Environment variables.
+       ansible.builtin.include_tasks: envs.yaml
+

@@ -1,0 +1,7 @@
+[podman]
+192.168.88.7
+
+[podman:vars]
+ansible_user=support
+ansible_port=22
+#ansible_python_interpreter=/usr/bin/python3

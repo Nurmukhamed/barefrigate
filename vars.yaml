@@ -1,0 +1,72 @@
+---
+deps_packages:
+  - s6
+  - apt-transport-https
+  - ca-certificates
+  - gnupg
+  - wget
+  - lbzip2
+  - procps
+  - vainfo
+  - unzip
+  - locales
+  - tzdata
+  - libxml2
+  - xz-utils
+  - python3.11
+  - curl
+  - lsof
+  - jq
+  - nethogs
+  - libgl1
+  - libglib2.0-0
+  - libusb-1.0.0
+  - python3-h2
+  - libgomp1
+
+envs:
+  - name: NVIDIA_VISIBLE_DEVICES
+    value: "all"
+  - name: NVIDIA_DRIVER_CAPABILITIES
+    value: "compute,video,utility"
+  - name: TOKENIZERS_PARALLELISM
+    value: "true"
+  - name: TRANSFORMERS_NO_ADVISORY_WARNINGS
+    value: "1"
+  - name: OPENCV_FFMPEG_LOGLEVEL
+    value: "8"
+  - name: PYTHONWARNINGS
+    value: "ignore:::numpy.core.getlimits"
+  - name: HAILORT_LOGGER_PATH
+    value: "NONE"
+  - name: TF_CPP_MIN_LOG_LEVEL
+    value: "3"
+  - name: ENV TF_CPP_MIN_VLOG_LEVEL
+    value: "3"
+  - name: TF_ENABLE_ONEDNN_OPTS
+    value: "0"
+  - name: AUTOGRAPH_VERBOSITY
+    value: "0"
+  - name: GLOG_minloglevel
+    value: "3"
+  - name: GLOG_logtostderr
+    value: "0"
+  - name: PATH
+    value: "/usr/local/go2rtc/bin:/usr/local/tempio/bin:/usr/local/nginx/sbin:${PATH}"
+  - name: DEFAULT_FFMPEG_VERSION
+    value: "7.0"
+  - name: HAILORT_LOGGER_PATH
+    value: "NONE"
+  - name: INCLUDED_FFMPEG_VERSIONS
+    value: "7.0:5.0"
+  - name: NVIDIA_DRIVER_CAPABILITIES
+    value: "compute,video,utility"
+  - name:  NVIDIA_VISIBLE_DEVICES
+    value: "all"
+  - name: OPENCV_FFMPEG_LOGLEVEL
+    value: "8"
+  - name: S6_CMD_WAIT_FOR_SERVICES_MAXTIME
+    value: "0"
+  - name: S6_LOGGING_SCRIPT
+    value: "T 1 n0 s10000000 T"
+

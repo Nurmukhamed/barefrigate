@@ -1,0 +1,52 @@
+---
+- name: Copy files to /usr/local.
+  ansible.builtin.copy:
+    src: ./frigate/usr/local/
+    dest: /usr/local/
+    owner: root
+    group: root
+
+- name: Copy files to /opt/frigate.
+  ansible.builtin.copy:
+    src: ./frigate/opt/frigate/
+    dest: /opt/frigate/
+    owner: root
+    group: root
+
+- name: Copy files to /etc/s6-overlay/s6-rc.d.
+  ansible.builtin.copy:
+    src: ./frigate/etc/s6-overlay/s6-rc.d/
+    dest: /etc/s6-overlay/s6-rc.d/
+    owner: root
+    group: root
+
+- name: Copy files to /openvino-models.
+  ansible.builtin.copy:
+    src: ./frigate/openvino-models/
+    dest: /openvino-models/
+    owner: root
+    group: root
+
+- name: Copy files to /labelmap.
+  ansible.builtin.copy:
+    src: ./frigate/labelmap/
+    dest: /opt/labelmap/
+    owner: root
+    group: root
+
+- name: Copy files to /.
+  ansible.builtin.copy:
+    src: "./frigate/{{ item }}"
+    dest: "/{{ item }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - audio-labelmap.txt
+    - cpu_audio_model.tflite
+    - cpu_model.tflite
+    - edgetpu_model.tflite
+    - frigate.tar.gz
+    - get-pip.py
+    - init
+    - labelmap.txt  
