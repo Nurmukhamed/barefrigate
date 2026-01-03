@@ -1,7 +1,7 @@
-[podman]
-192.168.88.7
+[frigate]
+192.168.1.17
 
-[podman:vars]
+[frigate:vars]
 ansible_user=support
 ansible_port=22
 #ansible_python_interpreter=/usr/bin/python3

@@ -1,6 +1,6 @@
 ---
 - name: Do bare frigate.
-  hosts: all
+  hosts: frigate
   gather_facts: true
   become: true
 
