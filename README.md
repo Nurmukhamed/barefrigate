@@ -10,7 +10,14 @@ bash pull_extract_docker_image.sh
 
 ~~~
 
-Links:
+## Ansible playbook.
+
+Run command:
+~~~bash
+ansible-playbook main.yaml
+~~~
+
+## Links:
 
 * https://labs.iximiuz.com/tutorials/extracting-container-image-filesystem
 * https://docs.ansible.com/projects/ansible/3/collections/ansible/builtin/apt_module.html
