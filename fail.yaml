@@ -1,17 +1,29 @@
 ---
-- name: Set DPKG architecture
-  set_fact:
+- name: Set DPKG architecture.
+  ansible.builtin.set_fact:
     dpkg_arch: "{{ 'amd64' if ansible_architecture == 'x86_64' else ansible_architecture }}"
+
+- name: Debug DPKG architecture.
+  ansible.builtin.debug:
+    var: dpkg_arch
+
+- name: Debug Ansible Distribution.
+  ansible.builtin.debug:
+    var: ansible_distribution
 
 - name: Fail if OS is not Debian.
   when:
-    ansible_distribution == 'Debian'
+    ansible_distribution != 'Debian'
   ansible.builtin.fail:
     msg: "This playbook run on Debian only."
 
+- name: Debug Ansible Distribution version.
+  ansible.builtin.debug:
+    var: ansible_distribution_version
+
 - name: Fail if Debian version is not 12.
   when:
-    ansible_distribution_version == '12'
+    ansible_distribution_version is not regex("^12")
   ansible.builtin.fail:
     msg: "This playbook run on Debian 12 only."
 

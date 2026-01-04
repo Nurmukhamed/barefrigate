@@ -9,7 +9,7 @@
     name: "{{ item }}"
     state: present
     install_recommends: false
-  with_items: ""{{ deps_packages }}"
+  with_items: "{{ deps_packages }}"
 
 - name: Set python3 as the default python alternative
   community.general.alternatives:
@@ -28,28 +28,36 @@
 
 - name: Install Coral Runtime.
   ansible.builtin.apt:
-    deb: "https://github.com/feranick/libedgetpu/releases/download/16.0TF2.17.1-1/libedgetpu1-max_16.0tf2.17.1-1.bookworm_{{ dpkg_arch }}.deb"
+    deb: "https://github.com/feranick/libedgetpu/releases/download/16.0TF2.17.1-1/libedgetpu1-max_16.0tf2.17.1-1.bookworm_amd64.deb"
+  environment:
+    DEBIAN_FRONTEND: noninteractive
 
 - name: Add specified repository into sources list using specified filename
-  ansible.builtin.apt_repository:
-    repo: deb http://dl.google.com/linux/chrome/deb/ stable main
-    state: present
-    filename: google-chrome
-
-- name: Add mesa-teflon-delegate from bookworm-backports 1/2.
   block:
-    - name: Add mesa-teflon-delegate from bookworm-backports 1/2.
-      ansible.builtin.apt_repository:
-        repo: deb http://deb.debian.org/debian bookworm-backports main
-        state: present
-        filename: bookworm-backbacks
+    - name: Ensure that folder exists.
+      ansible.builtin.file:
+        path: /usr/share/keyrings
+        state: directory
+        owner: root
+        group: root
+        mode: 0755
 
-    - name: Add mesa-teflon-delegate from bookworm-backports 2/2.
-      ansible.builtin.apt:
-        name: "mesa-teflon-delegate/bookworm-backports"
+    - name: Download the package signing key for the Google repository
+      ansible.builtin.get_url:
+        url: https://dl.google.com/linux/linux_signing_key.pub
+        dest: /tmp/google-signing-key.asc
+        checksum: "sha256:0acccf28849439e3b2f7c60f899da45186a3a9b2fd02cc88cd44b25200016c56"
+
+    - name: Dearmor the downloaded signing key file
+      shell: gpg --batch --dearmor -o /usr/share/keyrings/google-signing-key.gpg /tmp/google-signing-key.asc
+      args:
+        creates: /usr/share/keyrings/google-signing-key.gpg
+
+    - name: Add specified repository into sources list using specified filename
+      ansible.builtin.apt_repository:
+        repo: deb [arch=amd64 signed-by=/usr/share/keyrings/google-signing-key.gpg] http://dl.google.com/linux/chrome/deb/ stable main
         state: present
-        install_recommends: false
-        install_suggests: false
+        filename: google-chrome
 
 - name: Install ffmpeg.
   block:
@@ -95,9 +103,9 @@
   block:
     - name: Change source list debian.sources 1/2.
       ansible.builtin.lineinfile:
-        path: etc/apt/sources.list.d/debian.sources
+        path: /etc/apt/sources.list.d/debian.sources
         regexp: "^Components: main$"
-        line: Components: main contrib non-free non-free-firmware
+        line: "Components: main contrib non-free non-free-firmware"
 
     - name: Run the equivalent of "apt-get update" as a separate step
       ansible.builtin.apt:
@@ -108,11 +116,10 @@
         name: i965-va-driver-shaders
         state: present
         install_recommends: false
-        install_suggests: false
 
     - name: Revert changes source list debian.sources 2/2.
       ansible.builtin.lineinfile:
-        path: etc/apt/sources.list.d/debian.sources
+        path: /etc/apt/sources.list.d/debian.sources
         regexp: "^Components: main contrib non-free non-free-firmware$"
         line: "Components: main"
 
@@ -199,20 +206,7 @@
       ansible.builtin.apt:
         deb: "{{ item }}"
         state: present
-      with_items:
-        - https://github.com/intel/compute-runtime/releases/download/24.52.32224.5/libigdgmm12_22.5.5_amd64.deb
-        - https://github.com/intel/compute-runtime/releases/download/24.35.30872.36/intel-opencl-icd-legacy1_24.35.30872.36_amd64.deb
-        - https://github.com/intel/compute-runtime/releases/download/24.35.30872.36/intel-level-zero-gpu-legacy1_1.5.30872.36_amd64.deb
-        - https://github.com/intel/intel-graphics-compiler/releases/download/igc-1.0.17537.24/intel-igc-opencl_1.0.17537.24_amd64.deb
-        - https://github.com/intel/intel-graphics-compiler/releases/download/igc-1.0.17537.24/intel-igc-core_1.0.17537.24_amd64.deb
-        - https://github.com/intel/compute-runtime/releases/download/24.52.32224.5/intel-opencl-icd_24.52.32224.5_amd64.deb
-        - https://github.com/intel/compute-runtime/releases/download/24.52.32224.5/intel-level-zero-gpu_1.6.32224.5_amd64.deb
-        - https://github.com/intel/intel-graphics-compiler/releases/download/v2.5.6/intel-igc-opencl-2_2.5.6+18417_amd64.deb
-        - https://github.com/intel/intel-graphics-compiler/releases/download/v2.5.6/intel-igc-core-2_2.5.6+18417_amd64.deb
-        - https://github.com/oneapi-src/level-zero/releases/download/v1.21.9/level-zero_1.21.9+u22.04_amd64.deb
-        - https://github.com/intel/linux-npu-driver/releases/download/v1.17.0/intel-driver-compiler-npu_1.17.0.20250508-14912879441_ubuntu22.04_amd64.deb
-        - https://github.com/intel/linux-npu-driver/releases/download/v1.17.0/intel-fw-npu_1.17.0.20250508-14912879441_ubuntu22.04_amd64.deb
-        - https://github.com/intel/linux-npu-driver/releases/download/v1.17.0/intel-level-zero-npu_1.17.0.20250508-14912879441_ubuntu22.04_amd64.deb
+      with_items: "{{ intel_packages }}"
 
 - name: Install Vulcan drivers.
   ansible.builtin.apt:
