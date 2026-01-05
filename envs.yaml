@@ -1,7 +1,7 @@
 ---
 - name: Set environment variables.
   ansible.builtin.lineinfile:
-    path: "/etc/environment"
+    path: "/etc/default/frigate"
     state: present
     regexp: "^{{ item.name }}"
     line: "{{ item.name }}={{ item.value }}"
