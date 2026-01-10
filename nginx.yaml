@@ -1,0 +1,11 @@
+---
+- name: Create or update nginx.conf.
+  ansible.builtin.template:
+    src: ./templates/nginx/nginx.conf
+    dest: /usr/local/nginx/conf/nginx.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+   - service-nginx-restarted
+   - service-nginx-started

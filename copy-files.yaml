@@ -13,6 +13,20 @@
     owner: root
     group: root
 
+- name: Copy files to /command.
+  ansible.builtin.copy:
+    src: ./frigate/command/
+    dest: /command/
+    owner: root
+    group: root
+
+- name: Copy files to /packages.
+  ansible.builtin.copy:
+    src: ./frigate/package/
+    dest: /package/
+    owner: root
+    group: root
+
 - name: Copy files to /etc/s6-overlay/s6-rc.d.
   ansible.builtin.copy:
     src: ./frigate/etc/s6-overlay/s6-rc.d/
@@ -46,7 +60,6 @@
     - cpu_audio_model.tflite
     - cpu_model.tflite
     - edgetpu_model.tflite
-    - frigate.tar.gz
     - get-pip.py
     - init
     - labelmap.txt  

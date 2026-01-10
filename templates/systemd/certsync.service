@@ -1,0 +1,12 @@
+[Unit]
+Description=CERTSYNC service
+After=network.target
+
+[Service]
+Type=simple
+EnvironmentFile=/etc/default/frigate
+ExecStart=/bin/bash /etc/s6-overlay/s6-rc.d/certsync/run
+Restart=always
+
+[Install]
+WantedBy=frigate.target

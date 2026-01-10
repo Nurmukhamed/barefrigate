@@ -1,0 +1,17 @@
+---
+- name: Create or update systemd unit files.
+  ansible.builtin.template:
+    src: "./templates/systemd/{{ item }}.service"
+    dest: "/etc/systemd/system/{{ item }}.service"
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - daemon-reload
+    - "service-{{ item }}-restarted"
+    - "service-{{ item }}-started"
+  with_items:
+    - certsync
+    - frigate
+    - go2rtc
+    - nginx

@@ -42,6 +42,46 @@
       name: media-frigate.mount
       state: started
 
+  - name: service-certsync-restarted
+    ansible.builtin.systemd:
+      name: certsync.service
+      state: restarted
+
+  - name: service-certsync-restarted
+    ansible.builtin.systemd:
+      name: certsync.service
+      state: started
+
+  - name: service-frigate-restarted
+    ansible.builtin.systemd:
+      name: frigate.service
+      state: restarted
+
+  - name: service-frigate-restarted
+    ansible.builtin.systemd:
+      name: frigate.service
+      state: started
+
+  - name: service-go2rtc-restarted
+    ansible.builtin.systemd:
+      name: go2rtc.service
+      state: restarted
+
+  - name: service-go2rtc-restarted
+    ansible.builtin.systemd:
+      name: go2rtc.service
+      state: started
+
+  - name: service-nginx-restarted
+    ansible.builtin.systemd:
+      name: nginx.service
+      state: restarted
+
+  - name: service-nginx-restarted
+    ansible.builtin.systemd:
+      name: nginx.service
+      state: started
+
   tasks:
     - name: Fail if.
       ansible.builtin.include_tasks: fail.yaml
@@ -57,6 +97,15 @@
 
     - name: Set Environment variables.
       ansible.builtin.include_tasks: envs.yaml
+
+    - name: Update systemd units.
+      ansible.builtin.include_tasks: systemd.yaml
+
+    - name: Update s6 files.
+      ansible.builtin.include_tasks: s6.yaml
+
+    - name: Update nginx.conf.
+      ansible.builtin.include_tasks: nginx.yaml
 
 #     - name: Create systemd mounts.
 #       ansible.builtin.include_tasks: systemd-mounts.yaml

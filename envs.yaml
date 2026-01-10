@@ -1,8 +1,16 @@
 ---
+- name: Ensure that /etc/default/frigate is exist.
+  ansible.builtin.file:
+    path: /etc/default/frigate
+    state: touch
+    owner: root
+    group: root
+    mode: '0644'
+
 - name: Set environment variables.
   ansible.builtin.lineinfile:
     path: "/etc/default/frigate"
     state: present
     regexp: "^{{ item.name }}"
-    line: "{{ item.name }}={{ item.value }}"
+    line: '{{ item.name }}="{{ item.value }}"'
   with_items: "{{ envs }}"
