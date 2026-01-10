@@ -47,7 +47,7 @@
       name: certsync.service
       state: restarted
 
-  - name: service-certsync-restarted
+  - name: service-certsync-started
     ansible.builtin.systemd:
       name: certsync.service
       state: started
@@ -57,7 +57,7 @@
       name: frigate.service
       state: restarted
 
-  - name: service-frigate-restarted
+  - name: service-frigate-started
     ansible.builtin.systemd:
       name: frigate.service
       state: started
@@ -67,7 +67,7 @@
       name: go2rtc.service
       state: restarted
 
-  - name: service-go2rtc-restarted
+  - name: service-go2rtc-started
     ansible.builtin.systemd:
       name: go2rtc.service
       state: started
@@ -77,7 +77,7 @@
       name: nginx.service
       state: restarted
 
-  - name: service-nginx-restarted
+  - name: service-nginx-started
     ansible.builtin.systemd:
       name: nginx.service
       state: started
