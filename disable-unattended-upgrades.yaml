@@ -1,0 +1,41 @@
+---
+- name: Stop and disable apt daily services and timers
+  ansible.builtin.service:
+    name: "{{ item }}"
+    state: stopped
+    enabled: no
+  loop:
+    - apt-daily.timer
+    - apt-daily.service
+    - apt-daily-upgrade.timer
+    - apt-daily-upgrade.service
+# Use systemctl daemon-reload if needed after making changes to services/timers
+# Note: The service module handles daemon-reload automatically when appropriate
+
+- name: Set APT periodic configuration to 0 (disable all automatic actions)
+  ansible.builtin.lineinfile:
+    path: /etc/apt/apt.conf.d/20auto-upgrades
+    regexp: '^APT::Periodic::{{ item }} ".*";'
+    line: 'APT::Periodic::{{ item }} "0";'
+    state: present
+    create: true # Create the file if it does not exist
+  loop:
+    - Update-Package-Lists
+    - Download-Upgradeable-Packages
+    - AutocleanInterval
+    - Unattended-Upgrade
+  # This ensures settings are explicitly set to "0" to stop checking and upgrading
+
+- name: Purge the unattended-upgrades package (optional, highly effective)
+  ansible.builtin.apt:
+    name: unattended-upgrades
+    state: absent
+    purge: true
+    autoremove: true
+  # This completely removes the system responsible for auto-updates
+
+- name: Ensure the apt cache is updated after changes
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600 # Update cache, but only if older than 1 hour (optional)
+

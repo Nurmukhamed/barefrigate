@@ -109,3 +109,6 @@
 
 #     - name: Create systemd mounts.
 #       ansible.builtin.include_tasks: systemd-mounts.yaml
+
+    - name: Disable unattended upgrades.
+      ansible.builtin.include_tasks: disable-unattended-upgrades.yaml
