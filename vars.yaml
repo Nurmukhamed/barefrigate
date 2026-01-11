@@ -57,8 +57,6 @@ envs:
     value: "NONE"
   - name: TF_CPP_MIN_LOG_LEVEL
     value: "3"
-  - name: ENV TF_CPP_MIN_VLOG_LEVEL
-    value: "3"
   - name: TF_ENABLE_ONEDNN_OPTS
     value: "0"
   - name: AUTOGRAPH_VERBOSITY
@@ -68,7 +66,7 @@ envs:
   - name: GLOG_logtostderr
     value: "0"
   - name: PATH
-    value: "/usr/local/go2rtc/bin:/usr/local/tempio/bin:/usr/local/nginx/sbin:${PATH}"
+    value: "/usr/local/go2rtc/bin:/usr/local/tempio/bin:/usr/local/nginx/sbin:/command:/package:${PATH}"
   - name: DEFAULT_FFMPEG_VERSION
     value: "7.0"
   - name: HAILORT_LOGGER_PATH
