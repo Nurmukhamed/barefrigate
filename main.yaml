@@ -42,6 +42,21 @@
       name: media-frigate.mount
       state: started
 
+  - name: target-frigate-enabled
+    ansible.builtin.systemd:
+      name: frigate.target
+      enabled: true
+
+  - name: target-frigate-restarted
+    ansible.builtin.systemd:
+      name: frigate.target
+      state: restarted
+
+  - name: target-frigate-started
+    ansible.builtin.systemd:
+      name: frigate.target
+      state: started
+
   - name: service-certsync-restarted
     ansible.builtin.systemd:
       name: certsync.service
@@ -51,6 +66,11 @@
     ansible.builtin.systemd:
       name: certsync.service
       state: started
+
+  - name: service-certsync-enabled
+    ansible.builtin.systemd:
+      name: certsync.service
+      enabled: true
 
   - name: service-frigate-restarted
     ansible.builtin.systemd:
@@ -62,6 +82,11 @@
       name: frigate.service
       state: started
 
+  - name: service-frigate-enabled
+    ansible.builtin.systemd:
+      name: frigate.service
+      enabled: true
+
   - name: service-go2rtc-restarted
     ansible.builtin.systemd:
       name: go2rtc.service
@@ -72,6 +97,11 @@
       name: go2rtc.service
       state: started
 
+  - name: service-go2rtc-enabled
+    ansible.builtin.systemd:
+      name: go2rtc.service
+      enabled: true
+
   - name: service-nginx-restarted
     ansible.builtin.systemd:
       name: nginx.service
@@ -81,6 +111,11 @@
     ansible.builtin.systemd:
       name: nginx.service
       state: started
+
+  - name: service-nginx-enabled
+    ansible.builtin.systemd:
+      name: nginx.service
+      enabled: true
 
   tasks:
     - name: Fail if.

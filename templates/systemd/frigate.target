@@ -1,0 +1,10 @@
+[Unit]
+Description=Frigate Target
+Documentation=man:systemd.special(7)
+Requires=multi-user.target
+Conflicts=rescue.service rescue.target
+After=rescue.service rescue.target multi-user.target
+AllowIsolate=yes
+
+[Install]
+WantedBy=multi-user.target

@@ -1,4 +1,17 @@
 ---
+- name: Create or update systemd target file.
+  ansible.builtin.template:
+    src: ./templates/systemd/frigate.target
+    dest: /etc/systemd/system/frigate.target
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - daemon-reload
+    - target-frigate-enabled
+    - target-frigate-started
+    - target-frigate-restarted
+
 - name: Create or update systemd unit files.
   ansible.builtin.template:
     src: "./templates/systemd/{{ item }}.service"
@@ -10,6 +23,7 @@
     - daemon-reload
     - "service-{{ item }}-restarted"
     - "service-{{ item }}-started"
+    - "service-{{ item }}-enabled"
   with_items:
     - certsync
     - frigate
