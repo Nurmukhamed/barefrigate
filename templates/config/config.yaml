@@ -1,0 +1,18 @@
+mqtt:
+  enabled: false
+
+cameras:
+  camera1: # <------ Name the camera
+    enabled: true
+    ffmpeg:
+      inputs:
+        - path:  rtsp://716f898c7b71.entrypoint.cloud.wowza.com:1935/app-8F9K44lJ/304679fe_stream2 # <----- The stream you want to use for detection
+          roles:
+            - detect
+    detect:
+      enabled: false # <---- disable detection until you have a working camera feed
+      width: 1280
+      height: 720
+detect:
+  enabled: true
+version: 0.16-0

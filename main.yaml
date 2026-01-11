@@ -142,6 +142,9 @@
     - name: Update nginx.conf.
       ansible.builtin.include_tasks: nginx.yaml
 
+    - name: Create or update frigate config file.
+      ansible.builtin.include_tasks: frigate-config.yaml
+
 #     - name: Create systemd mounts.
 #       ansible.builtin.include_tasks: systemd-mounts.yaml
 

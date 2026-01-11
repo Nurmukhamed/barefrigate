@@ -1,0 +1,19 @@
+---
+- name: Ensure that /config folder is exist.
+  ansible.builtin.file:
+    path: /config
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Copy or update frigate config file.
+  ansible.builtin.template:
+    src: ./templates/config/config.yaml
+    dest: /config/config.yaml
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - service-frigate-restarted
+    - service-frigate-started
