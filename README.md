@@ -3,30 +3,20 @@ A Ansible playbooks to extract files from docker image and run on bare server.
 
 You need 2 computers.
 
-First computer ( linux, macos, windows with wsl maybe) is used to run docker command, ansible playbooks. Let's call it Computer-A.
-Requirements - running docker, enough space to pull docker images (at least 4GB), enough space to extract, compress files from docker image (at least 10GB).  
+First computer ( linux, macos, windows with wsl maybe) is used to run command, ansible playbooks. Let's call it Computer-A.
+Requirements - installed python3, installed ansible package.
 
 Second computer is Debian OS running. Where files are extracted, packages are installed. Let's call it Computer-B.
 Requirements - running Debian 12, enough space to store compressed file, uncompressed files (at least 12 GB).
 
 ## **Computer-A**: Pull and extract frigate docker image. 
 
-Run command:
-
-~~~bash
-bash pull_extract_docker_image.sh
-~~~
-
-## **Computer-A**: Copy compressed file to Computer-B.
-
 Computer-B user is support, Computer-B ip is 192.168.1.17 for example.
 
 Run command:
 
 ~~~bash
-ssh support@192.168.1.17 "mkdir -p /home/support/barefrigate/frigate"
-scp frigate.tar.gz support@192.168.1.17:/home/support/barefrigate
-ssh support@192.168.1.17 "cd /home/support/barefrigate/frigate; tar zxvf ../frigate.tar.gz"
+cat pull_extract_docker_image.sh | ssh support@192.168.1.17
 ~~~
 
 ## **Computer-B**: Discover frigate filesystem uuids and set them as environment variables.
