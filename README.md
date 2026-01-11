@@ -36,6 +36,22 @@ export FRIGATE_DB_UUID="FRIGATE_DB_UUID"
 export FRIGATE_STORAGE_UUID="FRIGATE_STORAGE_UUID"
 ~~~
 
+## **Computer-A**: Setup and activate ansible.
+
+In linux, macos you may install ansible using venv.
+
+~~~bash
+python3 -m venv ~/ansible
+python3 -m pip install pip --upgrade
+python3 -m pip install ansible ansible-lint yamllint
+~~~
+
+To activate ansible use this command
+
+~~~bash
+source ~/ansible/bin/activate
+~~~
+
 ## **Computer-A**: Run Ansible playbook.
 
 **TODO** Update it
