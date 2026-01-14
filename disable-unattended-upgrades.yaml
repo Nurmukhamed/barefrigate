@@ -3,7 +3,7 @@
   ansible.builtin.service:
     name: "{{ item }}"
     state: stopped
-    enabled: no
+    enabled: false
   loop:
     - apt-daily.timer
     - apt-daily.service
@@ -38,4 +38,3 @@
   ansible.builtin.apt:
     update_cache: true
     cache_valid_time: 3600 # Update cache, but only if older than 1 hour (optional)
-
