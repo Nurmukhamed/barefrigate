@@ -1,6 +1,7 @@
 [Unit]
 Description=CERTSYNC service
 After=network.target
+After=create-logs.service
 
 [Service]
 Type=simple

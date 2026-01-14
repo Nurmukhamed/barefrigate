@@ -1,6 +1,8 @@
 [Unit]
 Description=NGINX service
 After=network.target
+After=create-logs.service
+Requires=create-logs.service
 
 [Service]
 Type=simple

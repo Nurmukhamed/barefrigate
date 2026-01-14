@@ -54,6 +54,18 @@
       state: started
       enabled: true
 
+  - name: Service-create-logs-restarted
+    ansible.builtin.systemd:
+      name: create-logs.service
+      state: restarted
+      enabled: true
+
+  - name: Service-create-logs-started
+    ansible.builtin.systemd:
+      name: create-logs.service
+      state: started
+      enabled: true
+
   - name: Service-certsync-restarted
     ansible.builtin.systemd:
       name: certsync.service

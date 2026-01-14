@@ -4,6 +4,9 @@ After=network.target
 Before=frigate.service
 Before=go2rtc.service
 Before=nginx.service
+Requires=frigate.service
+Requires=go2rtc.service
+Requires=nginx.service
 
 [Service]
 Type=simple
