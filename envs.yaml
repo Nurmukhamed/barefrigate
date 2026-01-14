@@ -14,3 +14,19 @@
     regexp: "^{{ item.name }}"
     line: '{{ item.name }}="{{ item.value }}"'
   with_items: "{{ envs }}"
+
+- name: Ensure that /etc/default/pre-frigate is exist.
+  ansible.builtin.file:
+    path: /etc/default/pre-frigate
+    state: touch
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Set environment variables.
+  ansible.builtin.lineinfile:
+    path: "/etc/default/pre-frigate"
+    state: present
+    regexp: "^{{ item.name }}"
+    line: '{{ item.name }}="{{ item.value }}"'
+  with_items: "{{ envs }}"
