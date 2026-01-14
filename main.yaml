@@ -5,148 +5,133 @@
   become: true
 
   vars_files:
-   - vars.yaml
+  - vars.yaml
 
   handlers:
-  - name: daemon-reload
+  - name: Daemon-reload
     ansible.builtin.systemd:
       daemon_reload: true
 
-  - name: frigate-config-mount-enabled
+  - name: Frigate-config-mount-enabled
     ansible.builtin.systemd:
       name: config.mount
       enabled: true
 
-  - name: frigate-db-mount-enabled
+  - name: Frigate-db-mount-enabled
     ansible.builtin.systemd:
       name: db.mount
       enabled: true
 
-  - name: frigate-storage-mount-enabled
+  - name: Frigate-storage-mount-enabled
     ansible.builtin.systemd:
       name: media-frigate.mount
       enabled: true
 
-  - name: frigate-config-mount-started
+  - name: Frigate-config-mount-started
     ansible.builtin.systemd:
       name: config.mount
       state: started
 
-  - name: frigate-db-mount-started
+  - name: Frigate-db-mount-started
     ansible.builtin.systemd:
       name: db.mount
       state: started
 
-  - name: frigate-storage-mount-started
+  - name: Frigate-storage-mount-started
     ansible.builtin.systemd:
       name: media-frigate.mount
       state: started
 
-  - name: target-frigate-enabled
-    ansible.builtin.systemd:
-      name: frigate.target
-      enabled: true
-
-  - name: target-frigate-restarted
+  - name: Target-frigate-restarted
     ansible.builtin.systemd:
       name: frigate.target
       state: restarted
+      enabled: true
 
-  - name: target-frigate-started
+  - name: Target-frigate-started
     ansible.builtin.systemd:
       name: frigate.target
       state: started
+      enabled: true
 
-  - name: service-certsync-restarted
+  - name: Service-certsync-restarted
     ansible.builtin.systemd:
       name: certsync.service
       state: restarted
+      enabled: true
 
-  - name: service-certsync-started
+  - name: Service-certsync-started
     ansible.builtin.systemd:
       name: certsync.service
       state: started
-
-  - name: service-certsync-enabled
-    ansible.builtin.systemd:
-      name: certsync.service
       enabled: true
 
-  - name: service-frigate-restarted
+  - name: Service-frigate-restarted
     ansible.builtin.systemd:
       name: frigate.service
       state: restarted
+      enabled: true
 
-  - name: service-frigate-started
+  - name: Service-frigate-started
     ansible.builtin.systemd:
       name: frigate.service
       state: started
-
-  - name: service-frigate-enabled
-    ansible.builtin.systemd:
-      name: frigate.service
       enabled: true
 
-  - name: service-go2rtc-restarted
+  - name: Service-go2rtc-restarted
     ansible.builtin.systemd:
       name: go2rtc.service
       state: restarted
+      enabled: true
 
-  - name: service-go2rtc-started
+  - name: Service-go2rtc-started
     ansible.builtin.systemd:
       name: go2rtc.service
       state: started
-
-  - name: service-go2rtc-enabled
-    ansible.builtin.systemd:
-      name: go2rtc.service
       enabled: true
 
-  - name: service-nginx-restarted
+  - name: Service-nginx-restarted
     ansible.builtin.systemd:
       name: nginx.service
       state: restarted
+      enabled: true
 
-  - name: service-nginx-started
+  - name: Service-nginx-started
     ansible.builtin.systemd:
       name: nginx.service
       state: started
-
-  - name: service-nginx-enabled
-    ansible.builtin.systemd:
-      name: nginx.service
       enabled: true
 
   tasks:
-    - name: Fail if.
-      ansible.builtin.include_tasks: fail.yaml
+  - name: Fail if.
+    ansible.builtin.include_tasks: fail.yaml
 
-    - name: Do apt install.
-      ansible.builtin.include_tasks: apt.yaml
+  - name: Do apt install.
+    ansible.builtin.include_tasks: apt.yaml
 
-#    - name: Copy files to remote server.
-#      ansible.builtin.include_tasks: copy-files.yaml
+  - name: Copy files to remote server.
+    ansible.builtin.include_tasks: copy-files.yaml
 
-#    - name: Create and install systemd services.
-#      ansible.builtin.include_tasks: systemd.yaml
+#  - name: Create and install systemd services.
+#    ansible.builtin.include_tasks: systemd.yaml
 
-    - name: Set Environment variables.
-      ansible.builtin.include_tasks: envs.yaml
+  - name: Set Environment variables.
+    ansible.builtin.include_tasks: envs.yaml
 
-    - name: Update systemd units.
-      ansible.builtin.include_tasks: systemd.yaml
+  - name: Update systemd units.
+    ansible.builtin.include_tasks: systemd.yaml
 
-    - name: Update s6 files.
-      ansible.builtin.include_tasks: s6.yaml
+  - name: Update s6 files.
+    ansible.builtin.include_tasks: s6.yaml
 
-    - name: Update nginx.conf.
-      ansible.builtin.include_tasks: nginx.yaml
+  - name: Update nginx.conf.
+    ansible.builtin.include_tasks: nginx.yaml
 
-    - name: Create or update frigate config file.
-      ansible.builtin.include_tasks: frigate-config.yaml
+  - name: Create or update frigate config file.
+    ansible.builtin.include_tasks: frigate-config.yaml
 
-#     - name: Create systemd mounts.
-#       ansible.builtin.include_tasks: systemd-mounts.yaml
+#  - name: Create systemd mounts.
+#    ansible.builtin.include_tasks: systemd-mounts.yaml
 
-    - name: Disable unattended upgrades.
-      ansible.builtin.include_tasks: disable-unattended-upgrades.yaml
+  - name: Disable unattended upgrades.
+    ansible.builtin.include_tasks: disable-unattended-upgrades.yaml
