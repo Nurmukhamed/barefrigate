@@ -21,3 +21,4 @@ apt_remove_podman
 
 sudo rm -rf "$HOME/barefrigate"
 
+sudo rm /etc/apt/sources.list.d/debian.sources
