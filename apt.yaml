@@ -1,7 +1,7 @@
 ---
 - name: Only run "update_cache=yes" if the last one is more than 3600 seconds ago.
   ansible.builtin.apt:
-    update_cache: yes
+    update_cache: true
     cache_valid_time: 3600
 
 - name: Ensure packages from install_deps.sh are installed.
@@ -24,13 +24,29 @@
     state: directory
     owner: root
     group: root
-    mode: 0600
+    mode: '0600'
 
 - name: Install Coral Runtime.
-  ansible.builtin.apt:
-    deb: "https://github.com/feranick/libedgetpu/releases/download/16.0TF2.17.1-1/libedgetpu1-max_16.0tf2.17.1-1.bookworm_amd64.deb"
-  environment:
-    DEBIAN_FRONTEND: noninteractive
+  block:
+    - name: Download edgetpu debian package.
+      ansible.builtin.get_url:
+        url: "https://github.com/feranick/libedgetpu/releases/download/16.0TF2.17.1-1/libedgetpu1-max_16.0tf2.17.1-1.bookworm_amd64.deb"
+        dest: /tmp/libedgetpu1-max_16.0tf2.17.1-1.bookworm_amd64.deb
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Install package
+      ansible.builtin.apt:
+        deb: "/tmp/libedgetpu1-max_16.0tf2.17.1-1.bookworm_amd64.deb"
+        force: true
+      environment:
+        DEBIAN_FRONTEND: noninteractive
+
+    - name: Ensure that package is removed.
+      ansible.builtin.file:
+        path: "/tmp/libedgetpu1-max_16.0tf2.17.1-1.bookworm_amd64.deb"
+        state: absent
 
 - name: Add specified repository into sources list using specified filename
   block:
@@ -40,7 +56,7 @@
         state: directory
         owner: root
         group: root
-        mode: 0755
+        mode: '0755'
 
     - name: Download the package signing key for the Google repository
       ansible.builtin.get_url:
@@ -67,7 +83,7 @@
         state: directory
         owner: root
         group: root
-        mode: 0755
+        mode: '0755'
 
     - name: Create folder for 7.0 version.
       ansible.builtin.file:
@@ -75,7 +91,7 @@
         state: directory
         owner: root
         group: root
-        mode: 0755
+        mode: '0755'
 
     - name: Unarchive 5.0 version.
       ansible.builtin.unarchive:
@@ -86,7 +102,7 @@
           - --strip-components
           - 1
           - amd64/bin/ffmpeg
-          -  amd64/bin/ffprobe
+          - amd64/bin/ffprobe
 
     - name: Unarchive 7.0 version.
       ansible.builtin.unarchive:
@@ -97,7 +113,7 @@
           - --strip-components
           - 1
           - amd64/bin/ffmpeg
-          -  amd64/bin/ffprobe
+          - amd64/bin/ffprobe
 
 - name: Install non-free of i965 driver.
   block:
@@ -109,7 +125,7 @@
 
     - name: Run the equivalent of "apt-get update" as a separate step
       ansible.builtin.apt:
-        update_cache: yes
+        update_cache: true
 
     - name: Install i965 driver.
       ansible.builtin.apt:
@@ -125,7 +141,7 @@
 
     - name: Run the equivalent of "apt-get update" as a separate step
       ansible.builtin.apt:
-        update_cache: yes
+        update_cache: true
 
     - name: Install intel-i965 drivers.
       ansible.builtin.apt:
@@ -152,7 +168,7 @@
         state: directory
         owner: root
         group: root
-        mode: 0755
+        mode: '0755'
 
     - name: Download the package signing key for the Intel Graphics repository
       ansible.builtin.get_url:
@@ -173,7 +189,7 @@
 
     - name: Run the equivalent of "apt-get update" as a separate step
       ansible.builtin.apt:
-        update_cache: yes
+        update_cache: true
 
     - name: Install intel packages 1/3.
       ansible.builtin.apt:
@@ -190,7 +206,7 @@
       ansible.builtin.apt:
         name: ocl-icd-libopencl1
         state: present
-      
+
     - name: Install intel packages 3/3.
       ansible.builtin.apt:
         name: libtbb12
@@ -227,12 +243,12 @@
     - xz-utils
 
 - name: Remove useless packages from the cache
-  apt:
-    autoclean: yes
+  ansible.builtin.apt:
+    autoclean: true
 
 - name: Remove dependencies that are no longer required
-  apt:
-    autoremove: yes
+  ansible.builtin.apt:
+    autoremove: true
 
 - name: Download the package signing key for the Intel Graphics repository
   ansible.builtin.get_url:
@@ -241,5 +257,4 @@
     checksum: "sha256:0ffc35320180d4911bc3a772934da508715e08af444cb33d4d43660065e25bcc"
     owner: root
     group: root
-    mode: 0755
-
+    mode: '0755'
