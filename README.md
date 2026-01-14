@@ -73,6 +73,14 @@ Run command:
 ansible-playbook main.yaml
 ~~~
 
+## **Computer-A**: Cleaning after install on Computer-B.
+
+Run command:
+
+~~~bash
+cat cleanup.sh | ssh support@192.168.1.17
+~~~
+
 ## Links:
 
 * https://labs.iximiuz.com/tutorials/extracting-container-image-filesystem
