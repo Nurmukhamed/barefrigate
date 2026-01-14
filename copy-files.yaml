@@ -1,60 +1,66 @@
 ---
-- name: Copy files to /usr/local.
-  ansible.builtin.copy:
-    src: ./frigate/usr/local/
-    dest: /usr/local/
+- name: Ensure that folders are exist.
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
     owner: root
     group: root
+    mode: '0755'
+  with_items:
+    - /opt/frigate
+    - /command
+    - /package
+    - /etc/s6-overlay/s6-rc.d
+    - /openvino-model
+    - /labelmap
+
+- name: Rsync files /usr/local.
+  ansible.builtin.command:
+    cmd: "rsync -avz /home/support/barefrigate/frigate/usr/local/ /usr/local/"
+  register: _rc
+  failed_when: _rc.rc != 0
 
 - name: Copy files to /opt/frigate.
-  ansible.builtin.copy:
-    src: ./frigate/opt/frigate/
-    dest: /opt/frigate/
-    owner: root
-    group: root
+  ansible.builtin.command:
+    cmd: "rsync -avz /home/support/barefrigate/frigate/opt/frigate/ /opt/frigate/"
+  register: _rc
+  failed_when: _rc.rc != 0
 
 - name: Copy files to /command.
-  ansible.builtin.copy:
-    src: ./frigate/command/
-    dest: /command/
-    owner: root
-    group: root
+  ansible.builtin.command:
+    cmd: "rsync -avz /home/support/barefrigate/frigate/command/ /command/"
+  register: _rc
+  failed_when: _rc.rc != 0
 
-- name: Copy files to /packages.
-  ansible.builtin.copy:
-    src: ./frigate/package/
-    dest: /package/
-    owner: root
-    group: root
+- name: Copy files to /package.
+  ansible.builtin.command:
+    cmd: "rsync -avz /home/support/barefrigate/frigate/package/ /package/"
+  register: _rc
+  failed_when: _rc.rc != 0
 
 - name: Copy files to /etc/s6-overlay/s6-rc.d.
-  ansible.builtin.copy:
-    src: ./frigate/etc/s6-overlay/s6-rc.d/
-    dest: /etc/s6-overlay/s6-rc.d/
-    owner: root
-    group: root
+  ansible.builtin.command:
+    cmd: "rsync -avz /home/support/barefrigate/frigate/etc/s6-overlay/s6-rc.d/ /etc/s6-overlay/s6-rc.d/"
+  register: _rc
+  failed_when: _rc.rc != 0
 
 - name: Copy files to /openvino-models.
-  ansible.builtin.copy:
-    src: ./frigate/openvino-models/
-    dest: /openvino-models/
-    owner: root
-    group: root
+  ansible.builtin.command:
+    cmd: "rsync -avz /home/support/barefrigate/frigate/openvino-model/ /openvino-model/"
+  register: _rc
+  failed_when: _rc.rc != 0
 
 - name: Copy files to /labelmap.
-  ansible.builtin.copy:
-    src: ./frigate/labelmap/
-    dest: /opt/labelmap/
-    owner: root
-    group: root
+  ansible.builtin.command:
+    cmd: "rsync -avz /home/support/barefrigate/frigate/labelmap/ /labelmap/"
+  register: _rc
+  failed_when: _rc.rc != 0
 
 - name: Copy files to /.
-  ansible.builtin.copy:
-    src: "./frigate/{{ item }}"
-    dest: "/{{ item }}"
-    owner: root
-    group: root
-    mode: 0644
+  ansible.builtin.command:
+    cmd: "cp /home/support/barefrigate/frigate/{{ item }} /"
+  register: _rc
+  failed_when: _rc.rc != 0
   with_items:
     - audio-labelmap.txt
     - cpu_audio_model.tflite
@@ -62,4 +68,4 @@
     - edgetpu_model.tflite
     - get-pip.py
     - init
-    - labelmap.txt  
+    - labelmap.txt
