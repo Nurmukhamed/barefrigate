@@ -1,14 +1,27 @@
 ---
+- name: Ensure that folders are exist.
+  ansible.builtin.file:
+    path: "/etc/s6-overlay/s6-rc.d/{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+  with_items:
+    - certsync
+    - frigate
+    - go2rtc
+    - nginx
+
 - name: Copy or update template for s6.
   ansible.builtin.template:
     src: "./templates/s6/{{ item }}.run"
     dest: "/etc/s6-overlay/s6-rc.d/{{ item }}/run"
     owner: root
     group: root
-    mode: 0644
+    mode: '0644'
   notify:
-    - "service-{{ item }}-restarted"
-    - "service-{{ item }}-started"
+    - "Service-{{ item }}-restarted"
+    - "Service-{{ item }}-started"
   with_items:
     - certsync
     - frigate
