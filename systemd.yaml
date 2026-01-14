@@ -5,12 +5,11 @@
     dest: /etc/systemd/system/frigate.target
     owner: root
     group: root
-    mode: 0644
+    mode: '0644'
   notify:
-    - daemon-reload
-    - target-frigate-enabled
-    - target-frigate-started
-    - target-frigate-restarted
+    - Daemon-reload
+    - Target-frigate-started
+    - Target-frigate-restarted
 
 - name: Create or update systemd unit files.
   ansible.builtin.template:
@@ -18,14 +17,25 @@
     dest: "/etc/systemd/system/{{ item }}.service"
     owner: root
     group: root
-    mode: 0644
+    mode: '0644'
   notify:
-    - daemon-reload
-    - "service-{{ item }}-restarted"
-    - "service-{{ item }}-started"
-    - "service-{{ item }}-enabled"
+    - Daemon-reload
+    - "Service-{{ item }}-restarted"
+    - "Service-{{ item }}-started"
   with_items:
     - certsync
     - frigate
     - go2rtc
     - nginx
+    - create-logs
+
+- name: Create pre-frigate.sh.
+  ansible.builtin.template:
+    src: ./templates/frigate/pre-frigate.sh
+    dest: /usr/local/bin/pre-frigate.sh
+    owner: root
+    group: root
+    mode: '0755'
+  notify:
+    - Service-frigate-restarted
+    - Service-frigate-started
