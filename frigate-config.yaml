@@ -15,5 +15,5 @@
     group: root
     mode: 0644
   notify:
-    - service-frigate-restarted
-    - service-frigate-started
+    - Service-frigate-restarted
+    - Service-frigate-started
