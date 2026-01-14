@@ -27,11 +27,12 @@ pull_and_extract_docker_image() {
   sudo gzip frigate.tar
 }
 
-apt_install_podman
-
 mkdir -p "${HOME}/barefrigate/frigate"
 
+apt_install_podman
+
 cd "${HOME}/barefrigate/frigate"
+
 rm -rf *
 
 cd "${HOME}/barefrigate"
