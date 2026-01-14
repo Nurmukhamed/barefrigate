@@ -5,8 +5,9 @@ After=network.target
 [Service]
 Type=simple
 EnvironmentFile=/etc/default/frigate
-ExecStart=/bin/bash /etc/s6-overlay/s6-rc.d/go2rtc/run
+ExecStart=/bin/bash /etc/s6-overlay/s6-rc.d/go2rtc/run 2>&1
 Restart=always
+StandardOutput=append:/dev/shm/logs/go2rtc/current
 
 [Install]
 WantedBy=frigate.target

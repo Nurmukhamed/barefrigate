@@ -5,6 +5,7 @@ After=network.target
 [Service]
 Type=simple
 EnvironmentFile=/etc/default/frigate
+ExecStartPre=-/usr/bin/mkdir -p /dev/shm/logs/nginx
 ExecStart=/bin/bash /etc/s6-overlay/s6-rc.d/nginx/run
 Restart=always
 

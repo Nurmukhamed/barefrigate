@@ -1,0 +1,19 @@
+[Unit]
+Description=Create logs folder and file service
+After=network.target
+Before=frigate.service
+Before=go2rtc.service
+Before=nginx.service
+
+[Service]
+Type=simple
+ExecStartPre=-/usr/bin/mkdir -p /dev/shm/logs/frigate
+ExecStartPre=-/usr/bin/touch /dev/shm/logs/frigate/current
+ExecStartPre=-/usr/bin/mkdir -p /dev/shm/logs/go2rtc
+ExecStartPre=-/usr/bin/touch /dev/shm/logs/go2rtc/current
+ExecStartPre=-/usr/bin/mkdir -p /dev/shm/logs/nginx
+ExecStartPre=-/usr/bin/touch /dev/shm/logs/nginx/current
+ExecStart=echo "Folders and files are created."
+
+[Install]
+WantedBy=frigate.target
