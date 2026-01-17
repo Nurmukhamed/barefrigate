@@ -47,4 +47,4 @@ cd "${HOME}/barefrigate"
 
 sudo rm frigate.tar.gz
 
-sudo cp "$HOME/barefrigate/frigate/etc/apt/sources.list.d/debian.sources /etc/apt/sources.list.d/debian.sources
+sudo cp "$HOME/barefrigate/frigate/etc/apt/sources.list.d/debian.sources" "/etc/apt/sources.list.d/debian.sources"
