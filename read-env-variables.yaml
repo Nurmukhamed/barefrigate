@@ -1,0 +1,4 @@
+---
+- name: Read SKIP_CORAL_EDGETPU_DRIVER_INSTALL environment variable.
+  ansible.builtin.set_fact:
+    _install_coral_edgetpu_driver: "{{ lookup('ansible.builtin.env','INSTALL_CORAL_EDGETPU_DRIVER', default='1') }}"

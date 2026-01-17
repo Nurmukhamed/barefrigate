@@ -26,28 +26,6 @@
     group: root
     mode: '0600'
 
-- name: Install Coral Runtime.
-  block:
-    - name: Download edgetpu debian package.
-      ansible.builtin.get_url:
-        url: "https://github.com/feranick/libedgetpu/releases/download/16.0TF2.17.1-1/libedgetpu1-max_16.0tf2.17.1-1.bookworm_amd64.deb"
-        dest: /tmp/libedgetpu1-max_16.0tf2.17.1-1.bookworm_amd64.deb
-        owner: root
-        group: root
-        mode: '0644'
-
-    - name: Install package
-      ansible.builtin.apt:
-        deb: "/tmp/libedgetpu1-max_16.0tf2.17.1-1.bookworm_amd64.deb"
-        force: true
-      environment:
-        DEBIAN_FRONTEND: noninteractive
-
-    - name: Ensure that package is removed.
-      ansible.builtin.file:
-        path: "/tmp/libedgetpu1-max_16.0tf2.17.1-1.bookworm_amd64.deb"
-        state: absent
-
 - name: Add specified repository into sources list using specified filename
   block:
     - name: Ensure that folder exists.
@@ -65,7 +43,8 @@
         checksum: "sha256:0acccf28849439e3b2f7c60f899da45186a3a9b2fd02cc88cd44b25200016c56"
 
     - name: Dearmor the downloaded signing key file
-      shell: gpg --batch --dearmor -o /usr/share/keyrings/google-signing-key.gpg /tmp/google-signing-key.asc
+      ansible.builtin.shell:
+        cmd:  gpg --batch --dearmor -o /usr/share/keyrings/google-signing-key.gpg /tmp/google-signing-key.asc
       args:
         creates: /usr/share/keyrings/google-signing-key.gpg
 
@@ -74,6 +53,68 @@
         repo: deb [arch=amd64 signed-by=/usr/share/keyrings/google-signing-key.gpg] http://dl.google.com/linux/chrome/deb/ stable main
         state: present
         filename: google-chrome
+
+- name: Install Coral Runtime.
+  when:
+    - _install_coral_edgetpu_driver
+  block:
+    - name: Get GPG key from google.
+      ansible.builtin.get_url:
+        url: 'https://packages.cloud.google.com/apt/doc/apt-key.gpg'
+        dest: /tmp/coral-edgetpu-archive.asc
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Dearmor GPG key.
+      ansible.builtin.command:
+        cmd: gpg --batch --dearmor -o /usr/share/keyrings/coral-edgetpu-archive.gpg /tmp/coral-edgetpu-archive.asc
+      changed_when: false
+      args:
+        creates: /usr/share/keyrings/coral-edgetpu-archive.gpg
+
+    - name: Add specified repository into sources list using specified filename
+      ansible.builtin.apt_repository:
+        repo: deb [arch=amd64 signed-by=/usr/share/keyrings/coral-edgetpu-archive.gpg] https://packages.cloud.google.com/apt coral-edgetpu-stable main
+        state: present
+        filename: coral-edgetpu
+
+    - name: Only run "update_cache=yes" if the last one is more than 3600 seconds ago.
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: Install packages.
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - gasket-dkms
+        - libedgetpu1-std
+      environment:
+        DEBIAN_FRONTEND: noninteractive
+
+    - name: Ensure that apex group is exist.
+      ansible.builtin.group:
+        name: apex
+        state: present
+
+    - name: Ensure that apex user is exist.
+      ansible.builtin.user:
+        name: apex
+        group: apex
+        state: present
+
+    - name: Create udev template.
+      ansible.builtin.copy:
+        content: 'SUBSYSTEM=="apex", MODE="0660", GROUP="apex"'
+        dest: /etc/udev/rules.d/65-apex.rules
+        owner: root
+        group: root
+        mode: 0644
+      notify:
+        - Udev-reload-rules
+        - Udev-trigger
 
 - name: Install ffmpeg.
   block:

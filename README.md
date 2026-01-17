@@ -9,6 +9,15 @@ Requirements - installed python3, installed ansible package.
 Second computer is Debian OS running. Where files are extracted, packages are installed. Let's call it Computer-B.
 Requirements - running Debian 12, enough space to store compressed file, uncompressed files (at least 12 GB).
 
+
+## Environment Variables 
+
+### if Coral EdgeTPU install is required.
+
+~~~bash
+export INSTALL_CORAL_EDGETPU_DRIVER=1
+~~~
+
 ## **Computer-A**: Pull and extract frigate docker image. 
 
 Computer-B user is support, Computer-B ip is 192.168.1.17 for example.
